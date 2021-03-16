@@ -1,7 +1,7 @@
 # Analysis of TCR clonality upon targetted amplification
 
 ## Pipeline outlook 
-1. intall tools
+<b>1. intall tools</b>
 
 We need: 
 - R and Rstudio (version >3.6)
@@ -11,16 +11,16 @@ We need:
 - Immunarch R package ( https://immunarch.com/ )
 - coffee
 
-2. run fastQC
+<b>2. run fastQC</b>
 
 fastQC will allow you to QC your amplicon reads. I always like to check things before going further. It shows you if you have reminance of sequencing adapters and primers, or bad read quality. See QC script for details to run in batch. 
 
-3. run mixcr
+<b>3. run mixcr</b>
 
 The documentation of the mixcr package is escquisitely annotated in the readthedocs.io! 
 Still I made some small script to automate the process (see mixcr script). 
 
-4. analyze mixcr output with immunarch (formely tcR)
+<b>4. analyze mixcr output with immunarch (formely tcR)</b>
 
 Immunarch has improved its game like crazy compared to previous versions of the tool. It also has a very neat quickstart page, and nifty options. 
 I made a quick R markdown script for our custom analyis. 
