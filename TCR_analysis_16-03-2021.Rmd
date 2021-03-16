@@ -1,0 +1,62 @@
+---
+title: "TCR analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(plyr)
+library(dplyr)
+library(dtplyr)
+library(stringr)
+library(dplyr)
+library(Biostrings)
+library(biomaRt)
+library(ggplot2)
+library(immunarch)
+#BiocManager::install("dtplyr")
+#install.packages("dtplyr") # skip this if you already installed devtools
+#devtools::install_github("immunomind/immunarch")
+
+#BiocManager::install("immunarch")
+
+knitr::opts_knit$set("/home/ben/Analysis/TCR_analysis/")
+
+```
+
+
+```{r importing data}
+
+#data(immdata)
+
+immdata <- repLoad("/home/ben/Analysis/TCR_analysis/raw_fastq/Rosa/mixcr_output/11/")  # Replace it with the path to your data. Immunarch automatically detects the file format.
+
+head(immdata)
+```
+
+
+```{r visualizing stuff}
+
+repExplore(immdata$data, "lens") %>% vis() #+ theme(legend.text = element_blank())  # Visualise the length distribution of CDR3
+repClonality(immdata$data, "homeo") %>% vis()  # Visualise the relative abundance of clonotypes
+
+
+repOverlap(immdata$data) %>% vis()  # Build the heatmap of public clonotypes shared between repertoires
+geneUsage(immdata$data[[1]]) %>% vis()  # Visualise the V-gene distribution for the first repertoire
+repDiversity(immdata$data) %>% vis(.meta = immdata$meta)  # Visualise the Chao1 diversity of repertoires, grouped by the patient status
+
+
+repExplore(immdata$data, .method = "count") %>% vis()
+
+
+repDiversity(immdata$data, "raref", .verbose = F) %>% vis()
+
+trackClonotypes(immdata$data,list(2, 100), .col = "nt") %>% vis() + theme(legend.text = element_blank())
+
+
+```
+
+
+
+
