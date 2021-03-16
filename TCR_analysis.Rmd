@@ -1,5 +1,7 @@
 ---
-title: "TCR analysis"
+title: "TCR clonotype analysis"
+author: "Benoit P Nicolet"
+date: "16-3-21"
 output: html_document
 ---
 
@@ -16,46 +18,55 @@ library(plyr)
 library(dplyr)
 library(dtplyr)
 library(stringr)
-library(Biostrings)
 library(ggplot2)
 library(immunarch)
 
-knitr::opts_knit$set("/home/ben/Analysis/TCR_analysis/")
+knitr::opts_knit$set("/path-to-analysis-folder/")
 
 ```
 
 
 ```{r importing data}
 
-#data(immdata)
+#data(immdata) # This will use the data of the package. 
 
-immdata <- repLoad("/home/ben/Analysis/TCR_analysis/raw_fastq/Rosa/mixcr_output/11/")  # Replace it with the path to your data. Immunarch automatically detects the file format.
+immdata <- repLoad("/path-to-mixcr-output/")  # Replace it with the path to your data. Immunarch automatically detects the file format. 
+# <3 lovely function.... 
 
-head(immdata)
+head(immdata) # list of dataframe
+
 ```
 
 
 ```{r visualizing stuff}
 
+## Clonotype versus CDR3 region length ##
 repExplore(immdata$data, "lens") %>% vis() #+ theme(legend.text = element_blank())  # Visualise the length distribution of CDR3
+
+## Colonotype abundance group per sample ##
 repClonality(immdata$data, "homeo") %>% vis()  # Visualise the relative abundance of clonotypes
+# Keep in mind here that the sample sequencing depth will greatly influence the clonotype abundance...!
 
 
+## Shared clonotypes between samples ##
 repOverlap(immdata$data) %>% vis()  # Build the heatmap of public clonotypes shared between repertoires
-geneUsage(immdata$data[[1]]) %>% vis()  # Visualise the V-gene distribution for the first repertoire
+
+
+## TCR V genes used in sample 1 ##
+geneUsage(immdata$data[[1]]) %>% vis()  # Visualise the V-gene distribution for the first repertoire  (change number for the sample number)
+
+## diversity analysis ##
 repDiversity(immdata$data) %>% vis(.meta = immdata$meta)  # Visualise the Chao1 diversity of repertoires, grouped by the patient status
+# here it uses Chao1, but you can change the method using .method= ......
 
+## Waterfall plot of colotype and abundance ## 
+repExplore(immdata$data, .method = "count") %>% vis() ## pretty pretty : )
 
-repExplore(immdata$data, .method = "count") %>% vis()
+## Rarefaction analysis ## 
+repDiversity(immdata$data, "raref", .verbose = F) %>% vis() # computationally intense for sample size >6 ...
 
-
-repDiversity(immdata$data, "raref", .verbose = F) %>% vis()
-
-trackClonotypes(immdata$data,list(2, 100), .col = "nt") %>% vis() + theme(legend.text = element_blank())
-
+## tracking shared clonotype throughout samples ##
+trackClonotypes(immdata$data,list(2, 10), .col = "nt") %>% vis() + theme(legend.text = element_blank())
+# here in list(x, y), x is the sample number and y is the number of top TCR sequences to consider. 
 
 ```
-
-
-
-
