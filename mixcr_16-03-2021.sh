@@ -2,18 +2,23 @@
 ### b.nicolet@sanquin.nl
 
 
-cd /home/ben/Analysis/TCR_analysis/raw_fastq/Rosa/
+###### This scripts will run mixcr on all files in the indicated folder ######
 
+# change to the directory where the raw fastq files are :
+cd /path-to-files/
+
+# now making a function to run mixcr file by file 
 for f in *.fastq
 do
     prefix="${f%.fastq}"
 
 mixcr analyze amplicon \
-	-s HomoSapiens \
-	--starting-material dna \
-	--5-end v-primers \
+	-s HomoSapiens \ # species
+	--starting-material dna \ # we use DNA amplicons
+	--5-end v-primers \ # we have v and j primers
 	--3-end j-primers \
-	--adapters adapters-present \
-	./${f} ./mixcr_output/${prefix}
+	--adapters adapters-present \ # Fastqc revealed left over sequencing primers, so we tell it to mixcr.
+	./${f} ./mixcr_output/${prefix} ## structure is " INPUT_FILE OUTPUT_PREFIX "
 
 done
+# Und voila : )
