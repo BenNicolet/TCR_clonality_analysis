@@ -6,20 +6,19 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-library(plyr)
-library(dplyr)
-library(dtplyr)
-library(stringr)
-library(dplyr)
-library(Biostrings)
-library(biomaRt)
-library(ggplot2)
-library(immunarch)
 #BiocManager::install("dtplyr")
 #install.packages("dtplyr") # skip this if you already installed devtools
 #devtools::install_github("immunomind/immunarch")
 
 #BiocManager::install("immunarch")
+
+library(plyr)
+library(dplyr)
+library(dtplyr)
+library(stringr)
+library(Biostrings)
+library(ggplot2)
+library(immunarch)
 
 knitr::opts_knit$set("/home/ben/Analysis/TCR_analysis/")
 
